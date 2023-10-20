@@ -21,6 +21,7 @@ jobs:
         with:
           image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
           format: 'table'
+          output: 'Report_Table.txt'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
@@ -35,3 +36,12 @@ jobs:
             SLACK_COLOR: ${{ job.status }}
             SLACK_MESSAGE: 'FAILED'
             SLACK_TITLE: Scan Failed-ZWQ
+        
+
+      - uses: MeilCli/slack-upload-file@v3
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          file_path: './Report_Table.txt'
+          initial_comment: 'ZWQ de table.'
+          
