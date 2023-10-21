@@ -64,4 +64,18 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.1.1
+      - name: Check install!
+        run: cosign version
           
+      - name: Sign Docker image
+        run: |
+          # Sign the Docker image
+          docker trust sign ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
+
+      - name: Push Docker image
+        run: |
+          # Push the signed Docker image
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
