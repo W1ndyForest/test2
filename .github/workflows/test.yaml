@@ -78,7 +78,7 @@ jobs:
 
       - name: Generate Cosign Key Pair
         run: |
-          echo -n | cosign generate-key-pair > cosign.key
+          cosign generate-key-pair
       
       
       - name: Add Cosign Private Key to Secrets
