@@ -85,7 +85,7 @@ jobs:
           
       - name: Sign Docker image
         run: |
-          # Sign the Docker image
+          # Sign the Docker images
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ secrets.DOCKERHUB_USERNAME }}/test@sha256:${{ steps.get_digest.outputs.digest }}
         env:
             COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
