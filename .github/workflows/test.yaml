@@ -6,25 +6,14 @@ on:
   
 jobs:
   build:
-    
+    if: "!startsWith(github.event.head_commit.message, '#NORUN')"
     runs-on: ubuntu-latest
   
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check commit message
-        run: |
-          if [[ "${{ github.event.head_commit.message }}" == "#NORUN"* ]]; then
-            echo "Commit message starts with #NORUN, stopping workflow..."
-            echo "::set-env name=SKIP_WORKFLOW::true"
-          fi
-      - name: Continue or stop workflow
-        run: |
-          if [ "${{ env.SKIP_WORKFLOW }}" == "true" ]; then
-            echo "Workflow is stopped."
-            exit 78
-          fi
+      
      
       - name: Build an image from Dockerfile
         run: |
