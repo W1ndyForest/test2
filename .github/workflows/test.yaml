@@ -76,6 +76,7 @@ jobs:
 
       - name: Generate Cosign Key Pair
         run: cosign generate-key-pair
+             pwd
 
       - name: Digitally sign the Docker image
         run: cosign sign --key cosign.key ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
