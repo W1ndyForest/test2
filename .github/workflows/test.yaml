@@ -79,7 +79,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
 
-     #2
+     #1
 
      
 
