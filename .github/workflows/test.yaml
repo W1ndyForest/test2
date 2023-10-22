@@ -80,6 +80,12 @@ jobs:
         uses: sigstore/cosign-installer@v3.1.1
       - name: Check install!
         run: cosign version
+
+      - name: Generate Cosign Private Key
+        run: cosign keygen > cosign_private_key
+
+      - name: Save Cosign Private Key as Secret
+        run: echo "$(<cosign_private_key)" | xargs -I {} echo "::set-secret name=COSIGN_PRIVATE_KEY::{}"
           
       - name: Sign Docker image
         run: |
