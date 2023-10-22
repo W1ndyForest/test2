@@ -65,12 +65,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
 
-      - name: Debug - List Docker images
-        run: docker images
-
-      - name: Debug - Show tag and digest
-        run: |
-          echo "Tag: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }} | Digest: $(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }} | cut -d'@' -f2)"
+     
 
       - name: Get Docker image digest
         id: get_digest
