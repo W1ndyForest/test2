@@ -76,7 +76,13 @@ jobs:
       - name: Check install!
         run: cosign version
 
+      - name: Generate Cosign Key Pair
+        run: cosign generate-key-pair > cosign.key
       
+      - name: Add Cosign Private Key to Secrets
+        run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+        env:
+            COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           
       - name: Sign Docker image
         run: |
