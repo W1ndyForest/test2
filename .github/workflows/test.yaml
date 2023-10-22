@@ -12,6 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Check commit message
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == "#NORUN"* ]]; then
+            echo "Commit message starts with #NORUN. Skipping workflow."
+            exit 78 # This will exit the workflow without failing it
+          fi
+
       - name: Build an image from Dockerfile
         run: |
           docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
@@ -67,32 +74,16 @@ jobs:
 
      
 
-      - name: Get Docker image digest
-        id: get_digest
-        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }} | cut -d'@' -f2)"
+     
 
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.1.1
-      - name: Check install!
-        run: cosign version
-
-      - name: Generate Cosign Key Pair
-        run: cosign generate-key-pair > cosign.key < /dev/null
-      
-      
-      - name: Add Cosign Private Key to Secrets
-        run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+      - name: Send Slack Notification
+        uses: rtCamp/action-slack-notify@v2
         env:
-            COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          
-      - name: Sign Docker image
-        run: |
-          # Sign the Docker images
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ secrets.DOCKERHUB_USERNAME }}/test@sha256:${{ steps.get_digest.outputs.digest }}
-        env:
-            COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-
-      - name: Push Docker image
-        run: |
-          # Push the signed Docker image
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
+            SLACK_WEBHOOK: ${{ secrets.TEST_SUBMISSION }}
+            SLACK_COLOR: good  
+            SLACK_MESSAGE: |
+              Name: ZHU WENQI
+              Matriculation Number: A0285888Y
+              Email: e1221700@u.nus.edu
+              Repository: [${{ github.repository }}](${{ github.repository_url }})
+              Docker Hub URL: [Your Docker Hub URL](${{ secrets.DOCKERHUB_URL }})
