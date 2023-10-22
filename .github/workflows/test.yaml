@@ -85,5 +85,5 @@ jobs:
               Name: ZHU WENQI
               Matriculation Number: A0285888Y
               Email: e1221700@u.nus.edu
-              Repository: [${{ github.repository }}](${{ github.repository_url }})
-              Docker Hub URL: [Your Docker Hub URL](${{ secrets.DOCKERHUB_URL }})
+              Repository: [${{ github.repository }}](${{ github.event.repository.html_url }})
+              Docker Hub URL: (${{ secrets.DOCKERHUB_URL }})
