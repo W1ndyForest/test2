@@ -78,7 +78,15 @@ jobs:
         run: cosign generate-key-pair
              
       - name: Include Cosign public key in the repository
-        run: cp cosign.pub ./cosign.pub
+        run: |
+          if [ ! -f cosign.pub ]; then
+            cp cosign.pub ./cosign.pub
+            git add cosign.pub
+            git commit -m "Add Cosign public key"
+            git push origin
+          else
+            echo "Cosign public key already exists."
+          fi
 
       - name: Digitally sign the Docker image
         run: cosign sign --key cosign.key ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
