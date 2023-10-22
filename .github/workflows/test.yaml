@@ -84,7 +84,8 @@ jobs:
       - name: Sign Docker image
         run: |
           # Sign the Docker image
-          docker trust sign ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ secrets.DOCKERHUB_USERNAME }}/test@sha256:${{ steps.get_digest.outputs.digest }}
+
 
       - name: Push Docker image
         run: |
