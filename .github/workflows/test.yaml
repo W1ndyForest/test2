@@ -8,6 +8,7 @@ jobs:
   build:
     
     runs-on: ubuntu-latest
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -15,10 +16,16 @@ jobs:
       - name: Check commit message
         run: |
           if [[ "${{ github.event.head_commit.message }}" == "#NORUN"* ]]; then
-            echo "Commit message starts with #NORUN. Skipping workflow."
-            exit 78 # This will exit the workflow without failing it
+            echo "Commit message starts with #NORUN, stopping workflow..."
+            echo "::set-env name=SKIP_WORKFLOW::true"
           fi
-
+      - name: Continue or stop workflow
+        run: |
+          if [ "${{ env.SKIP_WORKFLOW }}" == "true" ]; then
+            echo "Workflow is stopped."
+            exit 78
+          fi
+     
       - name: Build an image from Dockerfile
         run: |
           docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
@@ -86,4 +93,4 @@ jobs:
               Matriculation Number: A0285888Y
               Email: e1221700@u.nus.edu
               Repository: [${{ github.repository }}](${{ github.event.repository.html_url }})
-              Docker Hub URL: (${{ secrets.DOCKERHUB_URL }})
+              Docker Hub URL: ${{ secrets.DOCKERHUB_URL }}
