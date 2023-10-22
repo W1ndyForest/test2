@@ -81,17 +81,14 @@ jobs:
       - name: Check install!
         run: cosign version
 
-      - name: Generate Cosign Private Key
-        run: cosign keygen > cosign_private_key
-
-      - name: Save Cosign Private Key as Secret
-        run: echo "$(<cosign_private_key)" | xargs -I {} echo "::set-secret name=COSIGN_PRIVATE_KEY::{}"
+      
           
       - name: Sign Docker image
         run: |
           # Sign the Docker image
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ secrets.DOCKERHUB_USERNAME }}/test@sha256:${{ steps.get_digest.outputs.digest }}
-
+        env:
+            COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
 
       - name: Push Docker image
         run: |
