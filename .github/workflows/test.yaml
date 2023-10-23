@@ -67,7 +67,7 @@ jobs:
       - id: docker_meta
         uses: docker/metadata-action@v4.4.0
         with:
-          images: doker.io/windyforest/test/22
+          images: doker.io/windyforest/test/test
           tags: type=sha,format=long
       
       -
