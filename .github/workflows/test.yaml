@@ -74,29 +74,15 @@ jobs:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.1.1
 
-      - name: Generate Cosign Key Pair
+      - name: Sign image with a key
         run: |
-          cosign generate-key-pair
-          ls -al
-             
-      - name: Add and Commit Cosign Public Key
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add cosign.pub
-          git commit -m "Add cosign.pub"
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
+        env:
+          TAGS: ${{ steps.docker_meta.outputs.tags }}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
 
-      - name: Push Changes to GitHub
-        uses: ad-m/github-push-action@master
-        with:
-          branch: ${{ github.ref }}
-          directory: ./
-          force: true
-          github_token: ${{ secrets.GH_TOKEN }}
-
-
-      - name: Digitally sign the Docker image
-        run: cosign sign --key cosign.key ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
 
       
 
