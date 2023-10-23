@@ -29,7 +29,7 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,LOW'  
+          severity: 'CRITICAL,HIGH'  
 
       
       - name: Slack Notification
@@ -39,7 +39,7 @@ jobs:
             SLACK_WEBHOOK: ${{ secrets.TEST_SUBMISSION }}
             SLACK_COLOR: ${{ job.status }}
             SLACK_MESSAGE: 'FAILED'
-            SLACK_TITLE: Scan Failed-ZWQ
+            SLACK_TITLE: Scan Failed-ZHU WENQI
         
 
       - uses: MeilCli/slack-upload-file@v3
@@ -48,7 +48,7 @@ jobs:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
           file_path: './Report_Table.txt'
-          initial_comment: 'ZWQ de table.'
+          initial_comment: 'table of ZHU WENQI.'
 
       - 
         name: Set up QEMU
@@ -75,7 +75,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
 
-     #2
+     
       
    
 
