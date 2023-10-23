@@ -64,11 +64,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       
-      - id: docker_meta
-        uses: docker/metadata-action@v4.4.0
-        with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
-          tags: type=sha,format=long
+      
       
       -
         name: Build and push
@@ -93,7 +89,7 @@ jobs:
         run: |
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
         env:
-          TAGS: ${{ steps.docker_meta.outputs.tags }}
+          TAGS: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
