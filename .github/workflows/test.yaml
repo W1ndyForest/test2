@@ -74,14 +74,18 @@ jobs:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.1.2
 
+      - name: Display Cosign version
+        run: cosign version
+
       - name: Sign image with a key
         run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY 
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
         env:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
+
 
 
       
