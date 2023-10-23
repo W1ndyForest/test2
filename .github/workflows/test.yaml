@@ -73,6 +73,7 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v5
+        id: build-and-push
         with:
           context: "{{defaultContext}}"
           push: true
@@ -115,5 +116,5 @@ jobs:
               Name: ZHU WENQI
               Matriculation Number: A0285888Y
               Email: e1221700@u.nus.edu
-              Repository: [${{ github.repository }}](${{ github.event.repository.html_url }})
+              Repository: ${{ github.event.repository.html_url }}
               Docker Hub URL: ${{ secrets.DOCKERHUB_URL }}
