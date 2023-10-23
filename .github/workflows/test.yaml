@@ -75,7 +75,9 @@ jobs:
         uses: sigstore/cosign-installer@v3.1.1
 
       - name: Generate Cosign Key Pair
-        run: cosign generate-key-pair
+        run: |
+          cosign generate-key-pair
+          ls -al
              
       - name: Include Cosign public key in the repository
         run: |
