@@ -74,6 +74,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
+          context: "{{defaultContext}}:TEST"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
 
@@ -96,7 +97,8 @@ jobs:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-          DIGEST: ${{ steps.get_digest.outputs.digest }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+
 
 
 
