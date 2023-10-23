@@ -67,7 +67,7 @@ jobs:
       - id: docker_meta
         uses: docker/metadata-action@v4.4.0
         with:
-          images: doker.io/windyforest/test/test
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
           tags: type=sha,format=long
       
       -
