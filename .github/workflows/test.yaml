@@ -79,8 +79,11 @@ jobs:
           cosign generate-key-pair
           ls -al
              
-      - name: Include Cosign public key in the repository
-        run: cp cosign.pub $GITHUB_WORKSPACE/cosign.pub
+      - name: Upload Cosign public key
+        uses: actions/upload-artifact@v2
+        with:
+          name: cosign-public-key
+          path: $GITHUB_WORKSPACE/cosign.pub
 
       - name: Digitally sign the Docker image
         run: cosign sign --key cosign.key ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
