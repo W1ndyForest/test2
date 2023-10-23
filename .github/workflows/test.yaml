@@ -80,9 +80,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }}
 
      #2
-      - name: Get Docker image digest
-        id: get_digest
-        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKERHUB_USERNAME }}/test:${{ github.sha }} | cut -d'@' -f2)"
+      
    
 
       - name: Install Cosign
