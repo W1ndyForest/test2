@@ -90,6 +90,9 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
+          directory: ./
+          force: true
+          github_token: ${{ secrets.GH_TOKEN }}
 
 
       - name: Digitally sign the Docker image
